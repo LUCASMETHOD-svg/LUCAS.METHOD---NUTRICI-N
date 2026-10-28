@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#171a20" />
+  <title>Lucas.method | Nutrición</title>
+  <style>
+    :root{--bg:#f5f6f8;--card:#fff;--ink:#20242c;--muted:#747b87;--line:#e6e8ec;--dark:#171a20;--accent:#b8e6a8;--accent-ink:#23451f;--radius:18px}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,select,input{font:inherit} button{cursor:pointer} .shell{max-width:1120px;margin:auto;padding:24px 18px 56px}
+    header{background:var(--dark);color:white;border-radius:24px;padding:26px;margin-bottom:20px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .brand{font-size:12px;letter-spacing:.16em;color:#c3c9d2;font-weight:800}.hero h1{font-size:clamp(26px,4vw,38px);margin:8px 0}.hero p{color:#c3c9d2;margin:0}.tag{background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:800;padding:8px 12px;border-radius:999px;white-space:nowrap}
+    .section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:26px 0 12px}.section-title h2{font-size:20px;margin:0}.muted{color:var(--muted);font-size:13px}
+    .macro-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.metric,.meal,.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}.metric .label{color:var(--muted);font-size:12px}.metric .value{font-size:clamp(19px,2.5vw,27px);font-weight:800;margin-top:5px}.metric .unit{font-size:12px;color:var(--muted);font-weight:500}
+    .meals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.meal-head{display:flex;justify-content:space-between;align-items:start;gap:12px}.meal h3{margin:0;font-size:18px}.meal-total{font-size:12px;color:var(--muted);margin-top:4px}.options{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}.option-btn{border:1px solid #cfd4dc;background:white;color:#343a45;padding:7px 12px;border-radius:999px;font-size:12px}.option-btn.active{background:var(--dark);color:white;border-color:var(--dark)}
+    .food-list{display:grid;gap:9px}.food-row{display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:12px;align-items:center;border-top:1px solid var(--line);padding-top:10px}.food-name{font-weight:650}.food-detail{font-size:12px;color:var(--muted);margin-top:2px}.grams{width:76px;border:1px solid #d8dce3;border-radius:9px;padding:8px;text-align:right;background:white;color:var(--ink)}.meal-foot{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted)}.meal-foot strong{color:var(--ink)}
+    .bottom-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:18px}.panel h3{margin:0 0 12px}.macro-lines{display:grid;gap:12px}.macro-line{display:grid;grid-template-columns:100px 1fr 72px;gap:10px;align-items:center;font-size:13px}.bar{height:8px;background:#edf0f3;border-radius:20px;overflow:hidden}.bar span{display:block;height:100%;background:#8dbd7e;border-radius:20px;width:0}.notice{background:#fff8e6;border:1px solid #f2e3b6;color:#6f5719;border-radius:12px;padding:12px;font-size:12px;margin-top:14px}
+    .footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center}.reset{background:transparent;border:1px solid #555c68;color:inherit;border-radius:10px;padding:8px 11px;font-size:12px}
+    @media(max-width:800px){.macro-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.macro-grid .metric:last-child{grid-column:span 2}.meals,.bottom-grid{grid-template-columns:1fr}header{align-items:start;flex-direction:column}.tag{white-space:normal}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="hero"><div class="brand">LUCAS.METHOD</div><h1>Tu nutrición, a tu manera.</h1><p>Tu espacio de alimentación personalizado.</p></div>
+    <div><div class="tag">PROTOTIPO · DATOS DE EJEMPLO</div><p style="font-size:12px;color:#c3c9d2;margin:10px 0 0">Vista previa interactiva</p></div>
+  </header>
+  <div class="section-title"><div><h2>Resumen diario</h2><div class="muted">Los totales cambian al modificar cantidades u opciones.</div></div><button class="reset" id="reset">Restablecer ejemplo</button></div>
+  <section class="macro-grid" aria-label="Totales nutricionales">
+    <div class="metric"><div class="label">Energía</div><div class="value" id="kcal">0 <span class="unit">kcal</span></div></div>
+    <div class="metric"><div class="label">Proteínas</div><div class="value" id="protein">0 <span class="unit">g</span></div></div>
+    <div class="metric"><div class="label">Carbohidratos</div><div class="value" id="carbs">0 <span class="unit">g</span></div></div>
+    <div class="metric"><div class="label">Grasas</div><div class="value" id="fat">0 <span class="unit">g</span></div></div>
+    <div class="metric"><div class="label">Fibra</div><div class="value" id="fiber">0 <span class="unit">g</span></div></div>
+  </section>
+  <div class="section-title"><div><h2>Comidas del día</h2><div class="muted">Selecciona una opción y ajusta los gramos de cada alimento.</div></div></div>
+  <section class="meals" id="meals"></section>
+  <section class="bottom-grid">
+    <div class="panel"><h3>Distribución de macronutrientes</h3><div class="macro-lines" id="macro-lines"></div></div>
+    <div class="panel"><h3>Cómo utilizar esta página</h3><p class="muted">1. Elige una opción de comida.<br>2. Cambia los gramos si lo necesitas.<br>3. Revisa cómo se actualiza el resumen diario.</p><div class="notice">Importante: esta es una demostración local con alimentos y cifras de ejemplo. Aún no guarda dietas ni tiene cuentas de clientes. No introduzcas datos personales reales.</div></div>
+  </section>
+  <div class="footer">Lucas.method · Prototipo inicial · Los valores nutricionales son orientativos y deben verificarse antes de usarlos en una dieta real.</div>
+</div>
+<script>
+const foods = {
+  avena:{name:'Copos de avena',kcal:372,p:13.5,c:58.7,f:7.0,fi:10.0},
+  chocolate:{name:'Chocolate negro 85%',kcal:600,p:12.5,c:20.0,f:52.0,fi:11.0},
+  leche:{name:'Bebida de avena sin azúcar',kcal:35,p:0.7,c:4.7,f:1.4,fi:0.5},
+  proteina:{name:'Proteína en polvo',kcal:384,p:87,c:0.5,f:4,fi:0.5},
+  platano:{name:'Plátano',kcal:89,p:1.1,c:22.8,f:0.3,fi:2.6},
+  yogur:{name:'Yogur natural alto en proteína',kcal:60,p:10,c:3.5,f:0.5,fi:0},
+  nueces:{name:'Nueces',kcal:654,p:15.2,c:13.7,f:65.2,fi:6.7},
+  pan:{name:'Pan integral',kcal:247,p:13,c:41,f:4.2,fi:7},
+  huevo:{name:'Huevo',kcal:143,p:12.6,c:0.7,f:9.5,fi:0},
+  pollo:{name:'Pechuga de pollo cocinada',kcal:165,p:31,c:0,f:3.6,fi:0},
+  arroz:{name:'Arroz cocido',kcal:130,p:2.7,c:28.2,f:0.3,fi:0.4},
+  aceite:{name:'Aceite de oliva',kcal:884,p:0,c:0,f:100,fi:0},
+  patata:{name:'Patata cocida',kcal:87,p:1.9,c:20.1,f:0.1,fi:1.8},
+  salmon:{name:'Salmón',kcal:208,p:20.4,c:0,f:13.4,fi:0},
+  verduras:{name:'Verduras variadas',kcal:35,p:2,c:6,f:0.4,fi:2.5},
+  manzana:{name:'Manzana',kcal:52,p:0.3,c:13.8,f:0.2,fi:2.4}
+};
+const mealData = [
+ {id:'desayuno',name:'Desayuno',options:[
+  {name:'Opción 1',items:[['avena',70],['chocolate',10],['leche',150],['proteina',20],['platano',80]]},
+  {name:'Opción 2',items:[['pan',90],['huevo',100],['manzana',150]]},
+  {name:'Opción 3',items:[['yogur',200],['avena',50],['platano',100],['nueces',10]]}]},
+ {id:'comida',name:'Comida',options:[
+  {name:'Opción 1',items:[['pollo',150],['arroz',200],['verduras',150],['aceite',10]]},
+  {name:'Opción 2',items:[['salmon',150],['patata',250],['verduras',150],['aceite',5]]},
+  {name:'Opción 3',items:[['huevo',150],['arroz',180],['verduras',200],['aceite',8]]}]},
+ {id:'merienda',name:'Merienda',options:[
+  {name:'Opción 1',items:[['yogur',200],['platano',100],['nueces',10]]},
+  {name:'Opción 2',items:[['pan',60],['proteina',20],['manzana',100]]},
+  {name:'Opción 3',items:[['leche',250],['avena',35],['platano',80]]}]},
+ {id:'cena',name:'Cena',options:[
+  {name:'Opción 1',items:[['salmon',150],['patata',200],['verduras',200],['aceite',5]]},
+  {name:'Opción 2',items:[['pollo',130],['arroz',150],['verduras',200],['aceite',5]]},
+  {name:'Opción 3',items:[['huevo',150],['pan',60],['verduras',200],['aceite',5]]}]}
+];
+let selected = {desayuno:0,comida:0,merienda:0,cena:0};
+let amounts = {};
+function key(mealId,optIndex,foodId){return `${mealId}-${optIndex}-${foodId}`}
+function initAmounts(){amounts={};mealData.forEach(m=>m.options.forEach((o,oi)=>o.items.forEach(([fid,g])=>amounts[key(m.id,oi,fid)]=g)))}
+function foodTotals(fid,grams){const f=foods[fid],scale=grams/100;return {kcal:f.kcal*scale,p:f.p*scale,c:f.c*scale,f:f.f*scale,fi:f.fi*scale}}
+function optionTotals(m,oi){return m.options[oi].items.reduce((a,[fid,defaultG])=>{const t=foodTotals(fid,Number(amounts[key(m.id,oi,fid)]??defaultG));Object.keys(a).forEach(k=>a[k]+=t[k]);return a},{kcal:0,p:0,c:0,f:0,fi:0})}
+function fmt(n){return (Math.round(n*10)/10).toLocaleString('es-ES',{maximumFractionDigits:1})}
+function renderMeals(){const root=document.getElementById('meals');root.innerHTML='';mealData.forEach(m=>{const card=document.createElement('article');card.className='meal';const options=m.options.map((o,i)=>`<button class="option-btn ${selected[m.id]===i?'active':''}" data-meal="${m.id}" data-opt="${i}">${o.name}</button>`).join('');card.innerHTML=`<div class="meal-head"><div><h3>${m.name}</h3><div class="meal-total" id="meal-total-${m.id}"></div></div></div><div class="options">${options}</div><div class="food-list" id="food-list-${m.id}"></div><div class="meal-foot"><span>Subtotal de la comida</span><strong id="meal-foot-${m.id}"></strong></div>`;root.appendChild(card);card.querySelectorAll('.option-btn').forEach(b=>b.addEventListener('click',()=>{selected[b.dataset.meal]=Number(b.dataset.opt);renderMeals();updateTotals()}));renderFoods(m)});updateTotals()}
+function renderFoods(m){const oi=selected[m.id],list=document.getElementById(`food-list-${m.id}`);list.innerHTML='';m.options[oi].items.forEach(([fid,defaultG])=>{const g=Number(amounts[key(m.id,oi,fid)]??defaultG),f=foods[fid],row=document.createElement('div');row.className='food-row';row.innerHTML=`<div><div class="food-name">${f.name}</div><div class="food-detail">${fmt(foodTotals(fid,g).kcal)} kcal · P ${fmt(foodTotals(fid,g).p)} g · C ${fmt(foodTotals(fid,g).c)} g · G ${fmt(foodTotals(fid,g).f)} g</div></div><label><input class="grams" aria-label="Gramos de ${f.name}" type="number" min="0" max="3000" step="1" value="${g}" data-meal="${m.id}" data-opt="${oi}" data-food="${fid}"></label>`;list.appendChild(row)});list.querySelectorAll('input').forEach(input=>input.addEventListener('input',()=>{const g=Math.max(0,Math.min(3000,Number(input.value)||0));amounts[key(input.dataset.meal,Number(input.dataset.opt),input.dataset.food)]=g;const f=foods[input.dataset.food],t=foodTotals(input.dataset.food,g);input.closest('.food-row').querySelector('.food-detail').textContent=`${fmt(t.kcal)} kcal · P ${fmt(t.p)} g · C ${fmt(t.c)} g · G ${fmt(t.f)} g`;updateTotals()}))}
+function updateTotals(){let total={kcal:0,p:0,c:0,f:0,fi:0};mealData.forEach(m=>{const t=optionTotals(m,selected[m.id]);Object.keys(total).forEach(k=>total[k]+=t[k]);document.getElementById(`meal-total-${m.id}`).textContent=`${fmt(t.kcal)} kcal`;document.getElementById(`meal-foot-${m.id}`).textContent=`${fmt(t.kcal)} kcal · P ${fmt(t.p)} g · C ${fmt(t.c)} g · G ${fmt(t.f)} g`});[['kcal','kcal'],['protein','p'],['carbs','c'],['fat','f'],['fiber','fi']].forEach(([id,k])=>document.getElementById(id).innerHTML=`${fmt(total[k])} <span class="unit">${k==='kcal'?'kcal':'g'}</span>`);const max=Math.max(total.p*4,total.c*4,total.f*9,1);document.getElementById('macro-lines').innerHTML=[['Proteínas',total.p,total.p*4],['Carbohidratos',total.c,total.c*4],['Grasas',total.f,total.f*9]].map(([name,g,kcal])=>`<div class="macro-line"><span>${name}</span><div class="bar"><span style="width:${Math.min(100,kcal/max*100)}%"></span></div><strong>${fmt(g)} g</strong></div>`).join('')}
+document.getElementById('reset').addEventListener('click',()=>{selected={desayuno:0,comida:0,merienda:0,cena:0};initAmounts();renderMeals()});initAmounts();renderMeals();
+</script>
+</body>
+</html>
