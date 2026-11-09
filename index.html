@@ -307,21 +307,34 @@ function saveClientData(){localStorage.setItem('lm_goals_v1',JSON.stringify(goal
 function load(){loadClientData();try{
 foods=JSON.parse(localStorage.getItem('lm_foods_v3'))||structuredClone(seedFoods);
 recipes=JSON.parse(localStorage.getItem('lm_recipes_v3'))||structuredClone(seedRecipes);
-assignments=JSON.parse(localStorage.getItem('lm_assignments_v3'))||{'Desayuno':seedRecipes.filter(r=>r.id.startsWith('b')).map(r=>({recipeId:r.id,mult:1})),'Comida':seedRecipes.filter(r=>r.id.startsWith('l')).map(r=>({recipeId:r.id,mult:1})),'Merienda':seedRecipes.filter(r=>r.id.startsWith('s')).map(r=>({recipeId:r.id,mult:1})),'Cena':[{recipeId:'r3',mult:1}]};
+assignments=JSON.parse(localStorage.getItem('lm_assignments_v3'))||{};
 selectedOptions=JSON.parse(localStorage.getItem('lm_selected_v3'))||{'Desayuno':0,'Comida':0,'Merienda':0,'Cena':0};
-}catch(e){foods=structuredClone(seedFoods);recipes=structuredClone(seedRecipes);assignments={'Desayuno':seedRecipes.filter(r=>r.id.startsWith('b')).map(r=>({recipeId:r.id,mult:1})),'Comida':seedRecipes.filter(r=>r.id.startsWith('l')).map(r=>({recipeId:r.id,mult:1})),'Merienda':seedRecipes.filter(r=>r.id.startsWith('s')).map(r=>({recipeId:r.id,mult:1})),'Cena':[]};selectedOptions={'Desayuno':0,'Comida':0,'Merienda':0,'Cena':0}}
-// Migración: incorporar alimentos y recetas nuevas sin borrar lo guardado en el navegador.
+}catch(e){foods=structuredClone(seedFoods);recipes=structuredClone(seedRecipes);assignments={};selectedOptions={'Desayuno':0,'Comida':0,'Merienda':0,'Cena':0}}
+if(!foods||typeof foods!=='object'||Array.isArray(foods))foods=structuredClone(seedFoods);
+if(!Array.isArray(recipes))recipes=structuredClone(seedRecipes);
+if(!assignments||typeof assignments!=='object'||Array.isArray(assignments))assignments={};
+if(!selectedOptions||typeof selectedOptions!=='object'||Array.isArray(selectedOptions))selectedOptions={'Desayuno':0,'Comida':0,'Merienda':0,'Cena':0};
+// Recuperar los alimentos originales que falten, incluidos los de la plantilla flexible.
 Object.entries(seedFoods).forEach(([fid,food])=>{foods[fid]=structuredClone(food)});
-['placeholderProtein','placeholderCarbs','placeholderFats','placeholderVegetables'].forEach(fid=>delete foods[fid]);
-const builtInRecipeIds=new Set([...seedRecipes.map(r=>r.id),'d5']);
-recipes=recipes.filter(recipe=>!builtInRecipeIds.has(recipe.id));
+// Mantener las recetas base tal y como están definidas y conservar las recetas creadas por el usuario.
+const builtInRecipeIds=new Set(seedRecipes.map(r=>r.id));
+recipes=recipes.filter(recipe=>recipe&&recipe.id&&!builtInRecipeIds.has(recipe.id));
 recipes.push(...structuredClone(seedRecipes));
-if(!assignments['Desayuno'])assignments['Desayuno']=[];
-if(!assignments['Comida'])assignments['Comida']=[];
-if(!assignments['Merienda'])assignments['Merienda']=[];
-if(!assignments['Cena'])assignments['Cena']=[];
-['d1','d2','d3','d4','d5','d6'].forEach(rid=>{if(!assignments['Cena'].some(a=>a.recipeId===rid))assignments['Cena'].push({recipeId:rid,mult:1})});
-if(!assignments['Merienda'].some(a=>a.recipeId==='s1'))assignments['Merienda'].push({recipeId:'s1',mult:1});
+// Completar las opciones que falten en cada comida sin duplicar ni borrar las asignaciones existentes.
+const defaultMealRecipes={
+'Desayuno':seedRecipes.filter(r=>r.id.startsWith('b')),
+'Comida':seedRecipes.filter(r=>r.id.startsWith('l')),
+'Merienda':seedRecipes.filter(r=>r.id.startsWith('s')),
+'Cena':[seedRecipes.find(r=>r.id==='r3'),...seedRecipes.filter(r=>r.id.startsWith('d'))].filter(Boolean)
+};
+Object.entries(defaultMealRecipes).forEach(([meal,mealRecipes])=>{
+if(!Array.isArray(assignments[meal]))assignments[meal]=[];
+const existingIds=new Set(assignments[meal].filter(a=>a&&a.recipeId).map(a=>a.recipeId));
+mealRecipes.forEach(recipe=>{if(!existingIds.has(recipe.id))assignments[meal].push({recipeId:recipe.id,mult:1})});
+});
+['Desayuno','Comida','Merienda','Cena'].forEach(meal=>{
+if(!Number.isFinite(Number(selectedOptions[meal]))||Number(selectedOptions[meal])<0)selectedOptions[meal]=0;
+});
 save();
 }
 function save(){localStorage.setItem('lm_foods_v3',JSON.stringify(foods));localStorage.setItem('lm_recipes_v3',JSON.stringify(recipes));localStorage.setItem('lm_assignments_v3',JSON.stringify(assignments));localStorage.setItem('lm_selected_v3',JSON.stringify(selectedOptions));}
