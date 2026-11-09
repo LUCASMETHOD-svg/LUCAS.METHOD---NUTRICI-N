@@ -34,7 +34,7 @@
 .profile-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 @media(max-width:760px){.data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.goal-head{align-items:flex-start;flex-direction:column}}
 </style></head><body><div class="shell">
-<header><div class="hero"><div class="brand">LUCAS.METHOD</div><h1>Tu nutrición, a tu manera.</h1><p>7 desayunos, 4 comidas, 1 merienda y 5 cenas · Alternativas para organizar tu día.</p></div><div class="tag">LUCAS.METHOD · PLAN NUTRICIONAL</div></header>
+<header><div class="hero"><div class="brand">LUCAS.METHOD</div><h1>Tu nutrición, a tu manera.</h1><p>7 desayunos, 4 comidas, 1 merienda y 6 cenas · Biblioteca de alimentos y recetas.</p></div><div class="tag">LUCAS.METHOD · PLAN NUTRICIONAL</div></header>
 
 <div class="notice"><strong>Privacidad:</strong> objetivos, perfil y progreso se guardan solo en este navegador. No hay inicio de sesión ni sincronización entre dispositivos. Evita dispositivos compartidos y no introduzcas información clínica sensible.</div>
 <nav class="nav nav-main">
@@ -43,9 +43,6 @@
 <button data-tab="progress">Mi progreso</button>
 <button data-tab="guide">Mi guía</button>
 <button data-tab="profile">Mi perfil</button>
-</nav>
-<div class="nav-tools-label">Herramientas de gestión</div>
-<nav class="nav nav-tools">
 <button data-tab="foods">Alimentos</button>
 <button data-tab="recipes">Recetas y platos</button>
 <button data-tab="assign">Asignar a comidas</button>
@@ -269,7 +266,11 @@ rawPotato:{name:'Patata cruda (valores transcritos de captura)',kcal:70,p:1.7,c:
 ,pumpkinSeeds:{name:'Pipas de calabaza (valores de la captura)',kcal:541,p:25,c:18,f:46,fi:0}
 ,eggWhites:{name:'Clara de huevo (valores de la captura)',kcal:51.5,p:10.9,c:.7,f:.2,fi:0}
 ,tortitasMaizCena:{name:'Tortitas de maíz DIA (valores de la captura)',kcal:368.4,p:8,c:79,f:6.6,fi:1.4}
-,rawVegDinnerFiber:{name:'Verdura cruda (valor de fibra según opción 6)',kcal:20,p:.9,c:4.5,f:.2,fi:1.4}
+,rawVegDinnerFiber:{name:'Verdura cruda (valor de fibra según opción 6)',kcal:20,p:.9,c:4.5,f:.2,fi:1.4},
+placeholderProtein:{name:'🍒 Proteína · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0},
+placeholderCarbs:{name:'🥚 Hidratos · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0},
+placeholderFats:{name:'🥑 Grasas · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0},
+placeholderVegetables:{name:'🥒 Verduras · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0}
 
 
 
@@ -289,12 +290,13 @@ const seedRecipes=[
 {id:'l4',name:'Comida 4 · Patata, lentejas, pollo, nueces y verduras',items:[{foodId:'rawPotato',g:300},{foodId:'lentilsCooked',g:70},{foodId:'chickenFresh',g:60},{foodId:'nuecesB',g:20},{foodId:'rawVegLunch',g:200}]},
 {id:'s1',name:'Merienda 1 · Proteína en polvo con leche de avena',items:[{foodId:'proteina1',g:20},{foodId:'lecheavena',g:100}]},
 {id:'r2',name:'Arroz con pollo y verduras (ejemplo)',items:[{foodId:'riceLunch',g:200},{foodId:'chickenFresh',g:150},{foodId:'rawVegLunch',g:150},{foodId:'oliveOilLunch',g:10}]},
-{id:'r3',name:'Lubina con patata y verduras (ejemplo)',items:[{foodId:'seabass',g:150},{foodId:'rawPotato',g:250},{foodId:'rawVegLunch',g:150},{foodId:'oliveOilLunch',g:5}]}
+{id:'r3',name:'Salmón con patata y verduras (ejemplo)',items:[{foodId:'seabass',g:150},{foodId:'rawPotato',g:250},{foodId:'rawVegLunch',g:150},{foodId:'oliveOilLunch',g:5}]}
 ,
 {id:'d1',name:'Cena 1 · Puré de patata, pollo, mozzarella y verduras',items:[{foodId:'pureePotato',g:50},{foodId:'chickenDinner',g:100},{foodId:'mozzarellaSpiga',g:60},{foodId:'rawVegLunch',g:200}]},
 {id:'d2',name:'Cena 2 · Pan integral, huevo, queso de cabra y verduras',items:[{foodId:'panintegral',g:75},{foodId:'huevo120',g:100},{foodId:'goatCheese',g:30},{foodId:'rawVegLunch',g:200}]},
 {id:'d3',name:'Cena 3 · Pasta integral, huevo, nueces y verduras',items:[{foodId:'pastaIntegral',g:50},{foodId:'huevo120',g:100},{foodId:'nuecesB',g:20},{foodId:'rawVegLunch',g:200}]},
 {id:'d4',name:'Cena 4 · Fajitas de maíz con pollo, pipas y verduras',items:[{foodId:'fajitasMaiz',g:50},{foodId:'chickenFresh',g:100},{foodId:'oliveOilLunch',g:7},{foodId:'pumpkinSeeds',g:10},{foodId:'rawVegLunch',g:200}]},
+{id:'d5',name:'Cena 5 · Opción flexible (plantilla para completar)',items:[{foodId:'placeholderProtein',g:0},{foodId:'placeholderCarbs',g:0},{foodId:'placeholderFats',g:0},{foodId:'placeholderVegetables',g:0}]},
 {id:'d6',name:'Cena 6 · Claras, tortitas de maíz y verduras',items:[{foodId:'eggWhites',g:100},{foodId:'tortitasMaizCena',g:50},{foodId:'rawVegDinnerFiber',g:200}]}
 
 ];
@@ -305,7 +307,7 @@ function saveClientData(){localStorage.setItem('lm_goals_v1',JSON.stringify(goal
 function load(){loadClientData();try{
 foods=JSON.parse(localStorage.getItem('lm_foods_v3'))||structuredClone(seedFoods);
 recipes=JSON.parse(localStorage.getItem('lm_recipes_v3'))||structuredClone(seedRecipes);
-assignments=JSON.parse(localStorage.getItem('lm_assignments_v3'))||{'Desayuno':seedRecipes.filter(r=>r.id.startsWith('b')).map(r=>({recipeId:r.id,mult:1})),'Comida':seedRecipes.filter(r=>r.id.startsWith('l')).map(r=>({recipeId:r.id,mult:1})),'Merienda':seedRecipes.filter(r=>r.id.startsWith('s')).map(r=>({recipeId:r.id,mult:1})),'Cena':[]};
+assignments=JSON.parse(localStorage.getItem('lm_assignments_v3'))||{'Desayuno':seedRecipes.filter(r=>r.id.startsWith('b')).map(r=>({recipeId:r.id,mult:1})),'Comida':seedRecipes.filter(r=>r.id.startsWith('l')).map(r=>({recipeId:r.id,mult:1})),'Merienda':seedRecipes.filter(r=>r.id.startsWith('s')).map(r=>({recipeId:r.id,mult:1})),'Cena':[{recipeId:'r3',mult:1}]};
 selectedOptions=JSON.parse(localStorage.getItem('lm_selected_v3'))||{'Desayuno':0,'Comida':0,'Merienda':0,'Cena':0};
 }catch(e){foods=structuredClone(seedFoods);recipes=structuredClone(seedRecipes);assignments={'Desayuno':seedRecipes.filter(r=>r.id.startsWith('b')).map(r=>({recipeId:r.id,mult:1})),'Comida':seedRecipes.filter(r=>r.id.startsWith('l')).map(r=>({recipeId:r.id,mult:1})),'Merienda':seedRecipes.filter(r=>r.id.startsWith('s')).map(r=>({recipeId:r.id,mult:1})),'Cena':[]};selectedOptions={'Desayuno':0,'Comida':0,'Merienda':0,'Cena':0}}
 // Migración: incorporar alimentos y recetas nuevas sin borrar lo guardado en el navegador.
@@ -318,8 +320,7 @@ if(!assignments['Desayuno'])assignments['Desayuno']=[];
 if(!assignments['Comida'])assignments['Comida']=[];
 if(!assignments['Merienda'])assignments['Merienda']=[];
 if(!assignments['Cena'])assignments['Cena']=[];
-assignments['Cena']=assignments['Cena'].filter(a=>a.recipeId!=='d5'&&a.recipeId!=='r3');
-['d1','d2','d3','d4','d6'].forEach(rid=>{if(!assignments['Cena'].some(a=>a.recipeId===rid))assignments['Cena'].push({recipeId:rid,mult:1})});
+['d1','d2','d3','d4','d5','d6'].forEach(rid=>{if(!assignments['Cena'].some(a=>a.recipeId===rid))assignments['Cena'].push({recipeId:rid,mult:1})});
 if(!assignments['Merienda'].some(a=>a.recipeId==='s1'))assignments['Merienda'].push({recipeId:'s1',mult:1});
 save();
 }
