@@ -11,7 +11,7 @@
 .meal-guidance{margin:10px 0 12px;padding:12px 13px;border-radius:10px;background:#f1f6ee;border:1px solid #dcebd5;color:#344632;font-size:13px;line-height:1.55}
 .meal-guidance strong{display:block;margin-bottom:4px}
 </style></head><body><div class="shell">
-<header><div class="hero"><div class="brand">LUCAS.METHOD</div><h1>Tu nutrición, a tu manera.</h1><p>7 desayunos, 4 comidas, merienda y 5 cenas · Alternativas para organizar tu día.</p></div><div class="tag">LUCAS.METHOD · PLAN NUTRICIONAL</div></header>
+<header><div class="hero"><div class="brand">LUCAS.METHOD</div><h1>Tu nutrición, a tu manera.</h1><p>7 desayunos, 4 comidas, 1 merienda y 5 cenas · Alternativas para organizar tu día.</p></div><div class="tag">LUCAS.METHOD · PLAN NUTRICIONAL</div></header>
 
 <div class="notice"><strong>Importante:</strong> tus selecciones y cambios se guardan únicamente en este navegador. No se sincronizan entre dispositivos ni constituyen un espacio privado. No introduzcas datos personales o información sanitaria. Sigue las cantidades de tu pauta individual y consulta con Lucas cualquier ajuste.</div>
 <nav class="nav"><button class="active" data-tab="plan">Vista de nutrición</button><button data-tab="foods">Alimentos</button><button data-tab="recipes">Recetas y platos</button><button data-tab="assign">Asignar a comidas</button><button data-tab="guide">Guía del plan</button></nav>
@@ -61,7 +61,7 @@
 <p class="guide-paragraph">El desayuno es tu primera recarga del día. Todas las opciones están ajustadas a tus gramos, así que puedes elegir la que mejor te venga según lo que toque ese día.</p>
 <h3 class="guide-heading">💪 SI ENTRENAS ESE DÍA</h3>
 <p class="guide-paragraph">Elige desayunos con buena proteína e hidratos para llegar con energía:</p>
-<p class="guide-line">⭐ Opción 1: avena proteica con plátano</p><p class="guide-line">⭐ Opción 2: avena con queso batido y fruta</p><p class="guide-line">⭐ Opción 5: tortilla francesa con tortitas y plátano</p><p class="guide-line">⭐ Opción 6: avena con plátano y miel</p><p class="guide-line">⭐ Opción 8: avena con kéfir, moras y nueces</p><p class="guide-line">⭐ Opción 4: avena con chía (mejor si tienes 2-3 horas de margen antes del entreno, porque la chía lleva bastante fibra)</p>
+<p class="guide-line">⭐ Opción 1: avena proteica con plátano</p><p class="guide-line">⭐ Opción 2: avena con queso batido y fruta</p><p class="guide-line">⭐ Opción 5: tortilla francesa con tortitas y plátano</p><p class="guide-line">⭐ Opción 6: tortitas de avena con huevo, proteína, plátano y miel</p><p class="guide-line">Si tu pauta incluye avena con kéfir, moras y nueces, también puede ser una alternativa.</p><p class="guide-line">⭐ Opción 4: avena con chía (mejor si tienes 2-3 horas de margen antes del entreno, porque la chía lleva bastante fibra)</p>
 <p class="guide-paragraph">Cuanto más cerca esté el entreno, más ligero tiene que ser el desayuno: pocas grasas y poca fibra. Si entrenas nada más levantarte, toma la parte de hidratos más ligera (el plátano, la fruta o el pan) 30-60 minutos antes y el resto al volver.</p>
 <h3 class="guide-heading">😌 SI ENTRENAS POR LA TARDE O ES TU DÍA DE DESCANSO</h3>
 <p class="guide-paragraph">Puedes elegir cualquier opción. Las que llevan más grasa y fibra (opciones 3, 5, 7 y 8) son las más saciantes, así que son perfectas cuando el entreno queda lejos y te ayudan a llegar a la comida sin hambre.</p>
@@ -192,10 +192,10 @@ rawPotato:{name:'Patata cruda (valores transcritos de captura)',kcal:70,p:1.7,c:
 ,eggWhites:{name:'Clara de huevo (valores de la captura)',kcal:51.5,p:10.9,c:.7,f:.2,fi:0}
 ,tortitasMaizCena:{name:'Tortitas de maíz DIA (valores de la captura)',kcal:368.4,p:8,c:79,f:6.6,fi:1.4}
 ,rawVegDinnerFiber:{name:'Verdura cruda (valor de fibra según opción 6)',kcal:20,p:.9,c:4.5,f:.2,fi:1.4}
-,placeholderProtein:{name:'🍒 Proteína · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0}
-,placeholderCarbs:{name:'🥚 Hidratos · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0}
-,placeholderFats:{name:'🥑 Grasas · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0}
-,placeholderVegetables:{name:'🥒 Verduras · añadir ingredientes',kcal:0,p:0,c:0,f:0,fi:0}
+
+
+
+
 };
 const seedRecipes=[
 {id:'b1',name:'Desayuno 1 · Avena, chocolate y proteína',items:[{foodId:'avena1',g:70},{foodId:'chocolate85',g:20},{foodId:'lecheavena',g:100},{foodId:'proteina1',g:20},{foodId:'platano',g:80}]},
@@ -229,6 +229,7 @@ selectedOptions=JSON.parse(localStorage.getItem('lm_selected_v3'))||{'Desayuno':
 }catch(e){foods=structuredClone(seedFoods);recipes=structuredClone(seedRecipes);assignments={'Desayuno':seedRecipes.filter(r=>r.id.startsWith('b')).map(r=>({recipeId:r.id,mult:1})),'Comida':seedRecipes.filter(r=>r.id.startsWith('l')).map(r=>({recipeId:r.id,mult:1})),'Merienda':seedRecipes.filter(r=>r.id.startsWith('s')).map(r=>({recipeId:r.id,mult:1})),'Cena':[]};selectedOptions={'Desayuno':0,'Comida':0,'Merienda':0,'Cena':0}}
 // Migración: incorporar alimentos y recetas nuevas sin borrar lo guardado en el navegador.
 Object.entries(seedFoods).forEach(([fid,food])=>{foods[fid]=structuredClone(food)});
+['placeholderProtein','placeholderCarbs','placeholderFats','placeholderVegetables'].forEach(fid=>delete foods[fid]);
 const builtInRecipeIds=new Set([...seedRecipes.map(r=>r.id),'d5']);
 recipes=recipes.filter(recipe=>!builtInRecipeIds.has(recipe.id));
 recipes.push(...structuredClone(seedRecipes));
